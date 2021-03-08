@@ -25,9 +25,9 @@ jobs:
           docker build . \
             --file Dockerfile \
             --tag ${{ steps.vars.outputs.docker_name }}:${{ steps.vars.outputs.docker_tag }} \
-      # - name: Push to GitHub Packages
-      #   if: github.ref == 'refs/heads/main'
-      #   run: |
-      #     echo ${{ secrets.GHCR_PAT  }} | docker login ghcr.io --username ${{ github.actor }} --password-stdin
-      #     docker tag ${{ steps.vars.outputs.docker_name }}:${{ steps.vars.outputs.docker_tag }} ${{ steps.vars.outputs.docker_name }}:latest
-      #     docker push ${{ steps.vars.outputs.docker_name }}
+      - name: Push to GitHub Packages
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo ${{ secrets.GHCR_PAT  }} | docker login ghcr.io --username ${{ github.actor }} --password-stdin
+          docker tag ${{ steps.vars.outputs.docker_name }}:${{ steps.vars.outputs.docker_tag }} ${{ steps.vars.outputs.docker_name }}:latest
+          docker push ${{ steps.vars.outputs.docker_name }}
