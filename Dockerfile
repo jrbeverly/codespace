@@ -8,3 +8,5 @@ COPY settings/ /tmp/settings/
 
 COPY provision/ /tmp/provision/
 RUN set -x ; for x in /tmp/provision/*.bash ; do bash "$x"; done
+
+LABEL org.opencontainers.image.source https://github.com/jrbeverly/codespace
