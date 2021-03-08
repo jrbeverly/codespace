@@ -1,0 +1,33 @@
+name: build-codespace
+on:
+  push:
+    paths:
+      - Dockerfile
+      - provision/*
+      - provision/**/*
+      - .github/workflows/build.yml
+  schedule:
+    - cron: "30 4 2 * *"
+  workflow_dispatch:
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set image variables
+        id: vars
+        run: |
+          echo ::set-output name=docker_name::ghcr.io/jrbeverly/codespace
+          echo ::set-output name=docker_tag::$(date -u +'%Y%m%d')
+      - name: Build
+        run: |
+          docker build . \
+            --file Dockerfile \
+            --tag ${{ steps.vars.outputs.docker_name }}:${{ steps.vars.outputs.docker_tag }} \
+      # - name: Push to GitHub Packages
+      #   if: github.ref == 'refs/heads/main'
+      #   run: |
+      #     echo ${{ secrets.GHCR_PAT  }} | docker login ghcr.io --username ${{ github.actor }} --password-stdin
+      #     docker tag ${{ steps.vars.outputs.docker_name }}:${{ steps.vars.outputs.docker_tag }} ${{ steps.vars.outputs.docker_name }}:latest
+      #     docker push ${{ steps.vars.outputs.docker_name }}
