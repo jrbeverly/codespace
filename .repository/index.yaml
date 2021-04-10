@@ -1,0 +1,11 @@
+slug: codespace
+description: Prebuilt, development environment in the browser – powered by VS Code
+project: jrbeverly
+namespace: env
+status: archived
+icon: icon.svg
+license:
+  type: MIT
+  content: Jonathan Beverly <jrbeverly>
+  year: 2021
+topics: []
