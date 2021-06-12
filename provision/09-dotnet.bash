@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -euf -o pipefail
+
 curl -sSL --noproxy "*"  https://dot.net/v1/dotnet-install.sh -o /tmp/dotnet-install.sh
 bash /tmp/dotnet-install.sh -c 5.0
 
