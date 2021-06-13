@@ -12,7 +12,7 @@ echo """
 [profile default]
 sso_start_url = https://jrbeverly.awsapps.com/start
 sso_region = us-east-1
-sso_account_id = 270025776990
+sso_account_id = 621253221781
 sso_role_name = AdministratorAccess
 region = ca-central-1
 output = json
