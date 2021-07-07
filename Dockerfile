@@ -10,6 +10,7 @@ COPY provision/ /tmp/provision/
 RUN set -x ; \
     TMPDIR=$(mktemp -d 'install-XXXXXXXX') ; \
     cd ${TMPDIR} ; \
-    for x in /tmp/provision/*.bash ; do bash "$x"; done
+    for x in /tmp/provision/*.bash ; do bash "$x"; done \
+    rm -rf ${TMPDIR}
 
 LABEL org.opencontainers.image.source https://github.com/jrbeverly/codespace
