@@ -15,4 +15,3 @@ davidanson.vscode-markdownlint
 svelte.svelte-vscode
 octref.vetur
 ms-kubernetes-tools.vscode-kubernetes-tools
-mauve.terraform
