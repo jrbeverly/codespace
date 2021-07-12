@@ -7,7 +7,7 @@ github_get_latest_release() {
     sed -E 's/.*"([^"]+)".*/\1/'                                    # Pluck JSON value
 }
 
-latest=$(github_get_latest_release cli/cli)
+latest=$(github_get_latest_release hashicorp/terraform)
 latest=${latest#"v"}
 curl "https://releases.hashicorp.com/terraform/${latest}/terraform_${latest}_linux_amd64.zip" -o "terraform.zip"
 unzip "terraform.zip"
