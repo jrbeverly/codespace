@@ -13,7 +13,7 @@ bazel --version
 latest=$(github_get_latest_release bazelbuild/buildtools)
 echo "bazelbuild/buildtools latest release: ${latest}"
 
-curl -sSL https://github.com/bazelbuild/buildtools/releases/download/${latest}/buildifier > /usr/bin/buildifier
-curl -sSL https://github.com/bazelbuild/buildtools/releases/download/${latest}/buildozer > /usr/bin/buildozer
+curl -sSL https://github.com/bazelbuild/buildtools/releases/download/${latest}/buildifier-linux-amd64 > /usr/bin/buildifier
+curl -sSL https://github.com/bazelbuild/buildtools/releases/download/${latest}/buildozer-linux-amd64 > /usr/bin/buildozer
 chmod +x /usr/bin/buildifier
 chmod +x /usr/bin/buildozer
