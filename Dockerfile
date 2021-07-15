@@ -6,6 +6,8 @@ ENV PATH "$PATH:/config/.local/bin"
 COPY assets/media /usr/local/share/.config/yarn/global/node_modules/code-server/src/browser/media/
 COPY settings/ /tmp/settings/
 
+COPY rootfs/ /
+
 COPY provision/ /tmp/provision/
 RUN set -x ; \
     TMPDIR=$(mktemp -d 'install-XXXXXXXX') ; \
