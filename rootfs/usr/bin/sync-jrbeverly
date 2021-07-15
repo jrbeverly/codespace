@@ -1,0 +1,67 @@
+#!/bin/bash
+set -euo pipefail
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+declare -a organizations
+organizations=( 
+    "jrbeverly"
+    "devkitspaces"
+    "blockycraft"
+    "xplatformer"
+    "thefriending"
+    "cardboardci"
+    "infraprints"
+)
+
+clone_list="$(mktemp).txt"
+touch "${clone_list}"
+
+for org in "${organizations[@]}"
+do 
+    DIR_TMP="$(mktemp -d '/tmp/github-sync-XXXXXXXX')"
+    echo "[${org}]: Starting read"
+    for i in {1..10}
+    do 
+        filename="${DIR_TMP}/${org}-${i}.json"
+
+        echo "[${org}]: Reading page ${i}"
+        curl -u "${GITHUB_USERNAME}:${GITHUB_TOKEN}" -sSL "https://api.github.com/users/${org}/repos?page=${i}" > "${filename}"
+        if jq -e '. | select(type == "array" and length == 0)' "${filename}" >/dev/null
+        then
+            echo "[${org}]: Finished reading at page ${i}"
+            break
+        fi
+    done
+
+    result="$(mktemp).json"
+    jq -s '. | add' "${DIR_TMP}/"*.json > "${result}"
+    jq -r '.[] | .ssh_url' "${result}" >> "${clone_list}"
+    cat "${clone_list}"
+done
+
+sed -i '/^$/d' "${clone_list}"
+while read p; do
+  DIR_TMP="$(mktemp -d '/tmp/github-clone-XXXXXXXX')"
+
+  echo git clone "$p" "${DIR_TMP}"
+  git clone "$p" "${DIR_TMP}"
+
+  data_file="${DIR_TMP}/.repository/index.yaml"
+  if test -f "${data_file}"; then
+    echo "Moving repository by location $p"
+
+    project=$(cat "${data_file}" | grep 'project:' | cut -d":" -f2 | tr -d '[:space:]')
+    namespace=$(cat "${data_file}" | grep 'namespace:' | cut -d":" -f2 | tr -d '[:space:]')
+    slug=$(cat "${data_file}" | grep 'slug:' | cut -d":" -f2 | tr -d '[:space:]')
+
+    mkdir -p "${project}" "${project}/${namespace}"
+    mv "${DIR_TMP}" "${project}/${namespace}/${slug}"
+  else
+    echo "Repository doesn't support .repository standard: $p"
+
+    name_of=$(basename "${p}" | cut -d'.' -f1)
+    mkdir -p "unorganized"
+    mv "${DIR_TMP}" "unorganized/${name_of}"
+  fi
+  
+done <"${clone_list}"
