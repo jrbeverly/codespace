@@ -6,3 +6,5 @@ curl -sSL -O --noproxy "*" https://dl.google.com/go/go${version}.linux-amd64.tar
 tar -xvf go${version}.linux-amd64.tar.gz 
 mv go /usr/local 
 rm go${version}.linux-amd64.tar.gz
+
+go get golang.org/x/tools/gopls@latest
